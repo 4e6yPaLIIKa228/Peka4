@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="VHODModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="VHODEntities" annotation:LazyLoadingEnabled="true">
+    <FunctionImport Name="sp_alterdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(VHODModel.sp_helpdiagramdefinition_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(VHODModel.sp_helpdiagrams_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams" />
+    <EntitySet Name="Organiz" EntityType="VHODModel.Organiz" />
+    <EntitySet Name="Postavka" EntityType="VHODModel.Postavka" />
+    <EntitySet Name="Tovar" EntityType="VHODModel.Tovar" />
+    <EntitySet Name="VHOD" EntityType="VHODModel.VHOD" />
+    <EntitySet Name="Zakypka_Materail" EntityType="VHODModel.Zakypka_Materail" />
+    <AssociationSet Name="FK_Postavka_Organiz" Association="VHODModel.FK_Postavka_Organiz">
+      <End Role="Organiz" EntitySet="Organiz" />
+      <End Role="Postavka" EntitySet="Postavka" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Postavka_Tovar" Association="VHODModel.FK_Postavka_Tovar">
+      <End Role="Tovar" EntitySet="Tovar" />
+      <End Role="Postavka" EntitySet="Postavka" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Postavka_VHOD" Association="VHODModel.FK_Postavka_VHOD">
+      <End Role="VHOD" EntitySet="VHOD" />
+      <End Role="Postavka" EntitySet="Postavka" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tovar_Zakypka_Materail" Association="VHODModel.FK_Tovar_Zakypka_Materail">
+      <End Role="Zakypka_Materail" EntitySet="Zakypka_Materail" />
+      <End Role="Tovar" EntitySet="Tovar" />
+    </AssociationSet>
+  </EntityContainer>
+  <ComplexType Name="sp_helpdiagramdefinition_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+  <EntityType Name="Organiz">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Organ" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Adress" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+    <Property Name="Dupektor" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Postavka" Relationship="VHODModel.FK_Postavka_Organiz" FromRole="Organiz" ToRole="Postavka" />
+  </EntityType>
+  <EntityType Name="Postavka">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Phone" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+    <Property Name="Organ" Type="Int32" Nullable="false" />
+    <Property Name="Tovar" Type="Int32" Nullable="false" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Organiz" Relationship="VHODModel.FK_Postavka_Organiz" FromRole="Postavka" ToRole="Organiz" />
+    <NavigationProperty Name="Tovar1" Relationship="VHODModel.FK_Postavka_Tovar" FromRole="Postavka" ToRole="Tovar" />
+    <NavigationProperty Name="VHOD" Relationship="VHODModel.FK_Postavka_VHOD" FromRole="Postavka" ToRole="VHOD" />
+  </EntityType>
+  <EntityType Name="Tovar">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name_Tovara" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Price" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="Coctav" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Material" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Postavka" Relationship="VHODModel.FK_Postavka_Tovar" FromRole="Tovar" ToRole="Postavka" />
+    <NavigationProperty Name="Zakypka_Materail" Relationship="VHODModel.FK_Tovar_Zakypka_Materail" FromRole="Tovar" ToRole="Zakypka_Materail" />
+  </EntityType>
+  <EntityType Name="VHOD">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Login" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="Binary" Nullable="false" MaxLength="50" FixedLength="false" />
+    <NavigationProperty Name="Postavka" Relationship="VHODModel.FK_Postavka_VHOD" FromRole="VHOD" ToRole="Postavka" />
+  </EntityType>
+  <EntityType Name="Zakypka_Materail">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Material" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Tovar" Relationship="VHODModel.FK_Tovar_Zakypka_Materail" FromRole="Zakypka_Materail" ToRole="Tovar" />
+  </EntityType>
+  <Association Name="FK_Postavka_Organiz">
+    <End Type="VHODModel.Organiz" Role="Organiz" Multiplicity="1" />
+    <End Type="VHODModel.Postavka" Role="Postavka" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Organiz">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Postavka">
+        <PropertyRef Name="Organ" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Postavka_Tovar">
+    <End Type="VHODModel.Tovar" Role="Tovar" Multiplicity="1" />
+    <End Type="VHODModel.Postavka" Role="Postavka" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tovar">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Postavka">
+        <PropertyRef Name="Tovar" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Postavka_VHOD">
+    <End Type="VHODModel.VHOD" Role="VHOD" Multiplicity="1" />
+    <End Type="VHODModel.Postavka" Role="Postavka" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="VHOD">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Postavka">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tovar_Zakypka_Materail">
+    <End Type="VHODModel.Zakypka_Materail" Role="Zakypka_Materail" Multiplicity="1" />
+    <End Type="VHODModel.Tovar" Role="Tovar" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Zakypka_Materail">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Tovar">
+        <PropertyRef Name="Material" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
